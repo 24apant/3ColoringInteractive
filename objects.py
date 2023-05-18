@@ -61,6 +61,8 @@ class Node:
         self.y = y
         self.color = config.WHITE
         self.neighbors = []
+        self.vX = 0
+        self.vY = 0
     
     def draw(self, gui,selected=None):
         if self == selected:
@@ -102,10 +104,10 @@ class Button:
         self.y = y
         self.w = w
         self.h = h
-        self.color = BUTTON_COLORS["idle"]
+        self.color = LIGHT_BLUE
         self.text = text
         self.gui = gui
-        self.state = 0
+        self.state = 1
 
     def clicked(self, mX, mY):
         return self.x <= mX <= self.x + self.w and self.y <= mY <= self.y+self.h
@@ -117,9 +119,12 @@ class Button:
         text = pygame.font.Font('freesansbold.ttf', 10).render(self.text, True, (0, 0, 0))
         self.gui.blit(text, (self.x+self.w//len(self.text), self.y+self.h//(len(self.text)-1)))
 
-    def activate(self):
+    def set_node(self):
         self.state = 1
-        self.color = BUTTON_COLORS["active"]
-    def deactivate(self):
+        self.color = LIGHT_BLUE
+    def set_attach(self):
         self.state = 0
-        self.color = BUTTON_COLORS["idle"]
+        self.color = YELLOW
+    def set_drag(self):
+        self.state = 2
+        self.color = GREEN

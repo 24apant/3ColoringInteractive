@@ -9,6 +9,8 @@ BLUE = (0, 0, 255)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 SELECTED = (255, 255, 0)
+LIGHT_BLUE = (200, 200, 255)
+YELLOW = (255, 255, 0)
 
 BUTTON_COLORS = {
     "idle":RED,
