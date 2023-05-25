@@ -1,18 +1,20 @@
 # some config global variables - these are self-explanatory
 
 NODE_RADIUS = int(25)
-GUI_W = 480
-GUI_H = 340
+GUI_W = 800
+GUI_H = 600
+
 RED = (255, 0, 0)
+ORANGE = (255, 165, 0)
 GREEN = (0, 255, 0)
+YELLOW_GREEN = (154, 205, 50)
 BLUE = (0, 0, 255)
+PINK = (159, 43, 104)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 SELECTED = (255, 255, 0)
 LIGHT_BLUE = (200, 200, 255)
 YELLOW = (255, 255, 0)
+FUCHSIA = (244, 200, 197)
 
-BUTTON_COLORS = {
-    "idle":RED,
-    "active":GREEN
-}
+COLORS = {0:RED,1:ORANGE,2:GREEN,3:YELLOW_GREEN,4:BLUE,5:PINK,6:FUCHSIA,7:BLACK, -1:WHITE}

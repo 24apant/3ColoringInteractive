@@ -7,14 +7,32 @@ import objects
 pygame.init()
 screen = pygame.display.set_mode((GUI_W, GUI_H))
 clock = pygame.time.Clock()
-game_over = False
-graph = objects.Graph(screen)
-b1 = objects.Button(100, 20, 40, 30, gui=screen, text="Node")
-node_for_attachment = None
-dragging = False
-top_line_h = 60
-r = NODE_RADIUS
 
+game_over = False
+top_line_h = 60 # separates the buttons and graph
+dragging = False # node that we refer to for dragging
+node_for_attachment = None # Node that we refer to when attaching
+
+
+graph = objects.Graph(screen)
+
+
+# Current Mode of the graph
+ModeButton = objects.Button(100, 20, 40, 30, ["Node", "Attach", "Drag"], {0:LIGHT_BLUE, 1:YELLOW, 2:GREEN}, gui=screen)
+
+
+# Buttons managing number of colors
+num_colors_button = objects.Button(200, 20, 40, 30, ["2", "3", "4", "5", "6", "7", "8"], COLORS, gui=screen)
+num_colors_button.set("3")
+graph.num_colors = int(num_colors_button.text)
+
+# Buttons for increasing, decreasing the number of colors and clearing graph
+down_button = objects.Button(250, 20, 40, 30, ["-"], {0:RED}, gui=screen)
+up_button = objects.Button(300, 20, 40, 30, ["+"], {0:GREEN}, gui=screen)
+clearGraphButton = objects.Button(400, 20, 40, 30, ["Clear"], {0:ORANGE}, gui=screen)
+
+# Create Random Graph Button
+random_graph_button = objects.Button(450, 20, 40, 30, ["Rand"], {0:LIGHT_BLUE}, gui=screen)
 
 while not game_over:
 
@@ -32,10 +50,10 @@ while not game_over:
             if mY - NODE_RADIUS >= 60:
 
                 # if b1 is in node state
-                if b1.text == "Node":
+                if ModeButton.text == "Node":
                     graph.add_node(mX, mY)
                 
-                elif b1.text == "Attach":
+                elif ModeButton.text == "Attach":
                     # if were on a node
                     for n in graph.nodes:
                         if n.clicked(mX, mY):
@@ -43,7 +61,7 @@ while not game_over:
                                 if n==node_for_attachment:
                                 # check if the edge exists
                                     pass
-                                elif n.value == node_for_attachment.value != "":
+                                elif n.color == node_for_attachment.color != WHITE:
                                     print("Can't connect graph of same values")
                                 elif not graph.edgeExists(n, node_for_attachment):
                                     graph.add_edge(node_for_attachment, n)
@@ -52,7 +70,7 @@ while not game_over:
                                 node_for_attachment = None
                             else:
                                 node_for_attachment = n
-                elif b1.text == "Drag":
+                elif ModeButton.text == "Drag":
                     if dragging == False:
                         for n in graph.nodes:
                             if n.clicked(mX, mY):
@@ -60,10 +78,18 @@ while not game_over:
             
             
 
-            elif b1.clicked(mX, mY):
-                if b1.state == 2:b1.set_node();b1.text = "Node";node_for_attachment = None
-                elif b1.state == 0:b1.set_drag();b1.text="Drag";node_for_attachment = None
-                else: b1.set_attach();b1.text = "Attach"
+            elif ModeButton.clicked(mX, mY):
+                ModeButton.setNext()
+            elif down_button.clicked(mX, mY):
+                num_colors_button.setPrev()
+                graph.num_colors = int(num_colors_button.text)
+            elif up_button.clicked(mX, mY):
+                num_colors_button.setNext()
+                graph.num_colors = int(num_colors_button.text)
+            elif clearGraphButton.clicked(mX, mY):
+                graph.resetGraph()
+            elif random_graph_button.clicked(mX, mY):
+                graph.create_random_graph(990, 80)
     
 
     if dragging is not False:
@@ -91,8 +117,6 @@ while not game_over:
             if n.vY < 0: n.vY +=1
             else: n.vY -= 1
         
-        
-        
 
         # check for out of bounds, 
         if(n.x + NODE_RADIUS >= GUI_W) or (n.x - NODE_RADIUS <= 0):
@@ -112,10 +136,18 @@ while not game_over:
         graph.color()
     if keyboard.is_pressed("c"):
         graph.clear()
+    if keyboard.is_pressed("g"):
+        graph.create_random_graph(990, 80)
 
     graph.draw(selected=node_for_attachment)
-    b1.draw()
+    ModeButton.draw()
+    num_colors_button.draw()
+    down_button.draw()
+    up_button.draw()
+    clearGraphButton.draw()
+    random_graph_button.draw()
+
     
     pygame.display.update()
-    clock.tick(24)
+    clock.tick(30)
     
